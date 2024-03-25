@@ -399,7 +399,7 @@ print(f"Training set size: {TRAIN_SIZE}%\n")
 ### Predictions without removing stop-words, lowercasing, or removing punctuation - naive bayes classifier
 # train
 print("Training classifier...")
-naive_bayes_train(train_data)
+naive_bayes_train_no_stop_words(train_data)
 
 print("Testing classifier...")
 print("Test results / metrics:\n")
@@ -408,20 +408,18 @@ actual_labels = test_data['review_class'].tolist()
 
 
 # get predictions
-predictions = naive_bayes_classifier(test_data)
+predictions = naive_bayes_classifier_no_stop_words(test_data)
 
 metrics= calculate_metrics(predictions, actual_labels)
 for metric, value in metrics.items():
     print(f"{metric}: {value}")
-
-
 
     
 # ask user for input of a sentence
 sentence = input("\n\nEnter your sentence: \n\n")
 classified_as = ""
 # display classifier decision along with P(CLASS_A |S) and P(CLASS_B | S) values on screen
-pos_prob, neg_prob = naive_bayes_individual(sentence)
+pos_prob, neg_prob = naive_bayes_individual_no_stop_words(sentence)
 if pos_prob >= neg_prob:
     classified_as = "positive"
 else:
@@ -432,14 +430,12 @@ print("\nSentence S: \n\n", sentence, "\n\nwas classified as: ", classified_as)
 print(f"P(Positive | S): {pos_prob}")   
 print(f"P(Negative | S): {neg_prob}")
 
-
-
 new_sentence_bool = input("Do you want to enter another sentece [Y/N]?")
 while new_sentence_bool.lower() == 'y':
     sentence = input("Enter your sentence: ")
     classified_as = ""
     # display classifier decision along with P(CLASS_A |S) and P(CLASS_B | S) values on screen
-    pos_prob, neg_prob = naive_bayes_individual(sentence)
+    pos_prob, neg_prob = naive_bayes_individual_no_stop_words(sentence)
     if pos_prob >= neg_prob:
         classified_as = "positive"
     else:
@@ -448,3 +444,8 @@ while new_sentence_bool.lower() == 'y':
     print(f"P(Positive | S): {pos_prob}")
     print(f"P(Negative | S): {neg_prob}")
     new_sentence_bool = input("Do you want to enter another sentece [Y/N]?")
+
+
+
+
+
