@@ -129,8 +129,8 @@ def naive_bayes_classifier_no_stop_words(test_data):
     alpha = 1
     
     for x in range(len(test_data)):
-        pos_prob = math.log(prior_probabilities['positive'])
-        neg_prob = math.log(prior_probabilities['negative'])
+        pos_prob = math.log10(prior_probabilities['positive'])
+        neg_prob = math.log10(prior_probabilities['negative'])
         document_words = test_data['content'][x].split()
         
         # calculate probabilities for each word in the review
@@ -147,12 +147,16 @@ def naive_bayes_classifier_no_stop_words(test_data):
                     word_pos_prob = alpha / (len(pos_indices) + alpha * V)
                     word_neg_prob = alpha / (len(neg_indices) + alpha * V)
                 
-                pos_prob += math.log(word_pos_prob)
-                neg_prob += math.log(word_neg_prob)
+                pos_prob += math.log10(word_pos_prob)
+                neg_prob += math.log10(word_neg_prob)
                 
-                # convert to linear space so that we can compare the probabilities (add up to 1)
-                pos_prob = 10**pos_prob
-                neg_prob = 10**neg_prob
+        # convert to linear space so that we can compare the probabilities (add up to 1)
+        pos_prob = 10**pos_prob
+        neg_prob = 10**neg_prob
+        
+        total_prob = pos_prob + neg_prob
+        pos_prob /= total_prob
+        neg_prob /= total_prob
                 
         # classify the review as positive or negative
         if pos_prob >= neg_prob:
@@ -168,8 +172,8 @@ def naive_bayes_individual_no_stop_words(review):
     # alpha is the smoothing factor
     alpha = 1
     
-    pos_prob = math.log(prior_probabilities['positive'])
-    neg_prob = math.log(prior_probabilities['negative'])
+    pos_prob = math.log10(prior_probabilities['positive'])
+    neg_prob = math.log10(prior_probabilities['negative'])
     document_words = review.split()
 
     # calculate probabilities for each word in the review
@@ -184,12 +188,17 @@ def naive_bayes_individual_no_stop_words(review):
                 word_pos_prob = 1 / (len(pos_indices) + V)
                 word_neg_prob = 1 / (len(neg_indices) + V)
             
-            pos_prob += math.log(word_pos_prob)
-            neg_prob += math.log(word_neg_prob)
+            pos_prob += math.log10(word_pos_prob)
+            neg_prob += math.log10(word_neg_prob)
             
-            # convert to linear space so that we can compare the probabilities (add up to 1)
-            pos_prob = 10**pos_prob
-            neg_prob = 10**neg_prob
+    # convert to linear space so that we can compare the probabilities (add up to 1)
+    pos_prob = 10**pos_prob
+    neg_prob = 10**neg_prob
+    
+    total_prob = pos_prob + neg_prob
+    pos_prob /= total_prob
+    neg_prob /= total_prob
+    
     return pos_prob, neg_prob
     
 
@@ -276,8 +285,8 @@ def naive_bayes_classifier(test_data):
     
     # calculate probabilities for each word in the review
     for x in range(len(test_data)):
-        pos_prob = math.log(prior_probabilities['positive'])
-        neg_prob = math.log(prior_probabilities['negative'])
+        pos_prob = math.log10(prior_probabilities['positive'])
+        neg_prob = math.log10(prior_probabilities['negative'])
         document_words = test_data['content'][x].split()
         # calculate probabilities for each word in the review
         for word in document_words:
@@ -292,12 +301,16 @@ def naive_bayes_classifier(test_data):
                     word_pos_prob = alpha / (len(pos_indices) + alpha * V)
                     word_neg_prob = alpha / (len(neg_indices) + alpha * V)
                 
-                pos_prob += math.log(word_pos_prob)
-                neg_prob += math.log(word_neg_prob)
+                pos_prob += math.log10(word_pos_prob)
+                neg_prob += math.log10(word_neg_prob)
                 
-                # convert to linear space so that we can compare the probabilities (add up to 1)
-                pos_prob = 10**pos_prob
-                neg_prob = 10**neg_prob
+        # convert to linear space so that we can compare the probabilities (add up to 1)
+        pos_prob = 10**pos_prob
+        neg_prob = 10**neg_prob
+        
+        total_prob = pos_prob + neg_prob
+        pos_prob /= total_prob
+        neg_prob /= total_prob
         # classify the review as positive or negative  
         if pos_prob >= neg_prob:
             predictions.append('positive')
@@ -313,8 +326,8 @@ def naive_bayes_individual(review):
     alpha = 1
     
     # calculate probabilities for each word in the review
-    pos_prob = math.log(prior_probabilities['positive'])
-    neg_prob = math.log(prior_probabilities['negative'])
+    pos_prob = math.log10(prior_probabilities['positive'])
+    neg_prob = math.log10(prior_probabilities['negative'])
     document_words = review.split()
 
     # calculate probabilities for each word in the review
@@ -328,12 +341,16 @@ def naive_bayes_individual(review):
                 word_pos_prob = 1 / (len(pos_indices) + V)
                 word_neg_prob = 1 / (len(neg_indices) + V)
             
-            pos_prob += math.log(word_pos_prob)
-            neg_prob += math.log(word_neg_prob)
-            
-            # convert to linear space so that we can compare the probabilities (add up to 1)
-            pos_prob = 10**pos_prob
-            neg_prob = 10**neg_prob
+            pos_prob += math.log10(word_pos_prob)
+            neg_prob += math.log10(word_neg_prob)
+    
+    # convert to linear space so that we can compare the probabilities (add up to 1)
+    pos_prob = 10**pos_prob
+    neg_prob = 10**neg_prob
+    
+    total_prob = pos_prob + neg_prob
+    pos_prob /= total_prob
+    neg_prob /= total_prob
 
     return pos_prob, neg_prob
 
